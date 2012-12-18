@@ -86,7 +86,7 @@ describe('POJO Serializer', function() {
     });
   });
 
-  it('should represent an instance with templated object properties', function(done) {
+  it('should represent an instance property with an alternative template', function(done) {
     var user = new User();
     user.firstName = 'Davos';
     var car = new Car();
@@ -95,9 +95,9 @@ describe('POJO Serializer', function() {
 
     represent.define(user, 'public', [
       represent.Field('firstName'),
-      represent.Field('car')
+      represent.Field('car', {template: 'different'})
     ]);
-    represent.define(car, 'public', []);
+    represent.define(car, 'different', []);
 
     represent.as.pojo(user, 'public', function(err, rep) {
       should.not.exist(err);
@@ -112,7 +112,7 @@ describe('POJO Serializer', function() {
     });
   });
 
-  
+
 
   it('should represent an array', function(done) {
     var user = new User();
