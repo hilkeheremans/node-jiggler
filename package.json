@@ -1,9 +1,9 @@
 {
   "author": "Heyride Inc.",
-  "name": "represent",
+  "name": "jiggler",
   "version": "0.0.0",
   "repository": {
-    "url": "https://github.com/Heyride/node-represent.git"
+    "url": "https://github.com/Heyride/node-jiggler.git"
   },
   "main": "lib/index.js",
   "directories": {
