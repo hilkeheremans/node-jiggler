@@ -1,7 +1,9 @@
+![Adventure Time Jiggler](http://a3094b75ef3de92d2032-5e0efc983ceed99b1f53c92d149fb2f5.r69.cf1.rackcdn.com/jiggler.gif)
+
+*The Jiggler is © 2012 Cartoon Network*
+
 node-jiggler
 ==============
-
-![Adventure Time Jiggler](http://a3094b75ef3de92d2032-5e0efc983ceed99b1f53c92d149fb2f5.r69.cf1.rackcdn.com/jiggler.gif)
 
 jiggler provides a simple and flexible interface for creating serialized representations for your JavaScript objects.
 
