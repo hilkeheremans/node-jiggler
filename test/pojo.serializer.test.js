@@ -39,7 +39,7 @@ describe('POJO Serializer', function() {
       });
     });
 
-    it('should represent an instance', function(done) {
+    it('should represent an instance with simple properties', function(done) {
       var user = new User();
       user.firstName = 'Davos';
       user.lastName = 'Seaworth';
@@ -55,6 +55,27 @@ describe('POJO Serializer', function() {
 
         rep.should.have.property('firstName', 'Davos');
         rep.should.have.property('lastName', 'Seaworth');
+
+        done();
+      });
+    });
+
+    it('should represent an instance with an array property', function(done) {
+      var user = {
+        test: ['one', 'two']
+      };
+
+      represent.define(user, 'public', [
+        represent.Field('test')
+      ]);
+
+      represent.as.pojo(user, 'public', function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        rep.should.have.property('test').with.lengthOf(2);
+        rep.test.should.include('one');
+        rep.test.should.include('two');
 
         done();
       });
