@@ -33,7 +33,7 @@ var blogSchema = new Schema({
 var Blog = mongoose.model('Blog', blogSchema);
 ```
 
-Let’s define a representation that formats blog objects for API consumption:
+Let’s define a representation that formats blog objects for API consumption. Only fields specifically defined in a template will be rendered. In addition, you can provide a value formatter function to manipulate values prior to their inclusion in the serialized response:
 
 ```javascript
 var J = require('jiggler');
@@ -49,7 +49,30 @@ J.define(Blog, 'public', [
     	}
     })
 ```
-Only fields specifically defined in a template will be rendered. In addition, you can provide a value formatter function to manipulate values prior to their inclusion in the serialized response:
+
+Now we can render a representation of a blog object using this template:
+
+```javascript
+// Create the blog instance
+var post = new Blog({
+	title: 'A Song of Ice and Fire',
+	author: 'George R. R. Martin',
+	comments: [{
+		body: 'I love this one!',
+		date: new Date()
+	}],
+	hidden: false,
+	meta: {
+		votes: 22,
+		favs: 12
+	}
+});
+
+// Apply the representation template
+J.as.pojo(post, 'public', {}, function(err, rep) {
+	console.log(rep);
+});
+```
 
 ### Output
 
