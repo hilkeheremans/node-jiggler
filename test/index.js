@@ -48,7 +48,9 @@ describe('Represent', function() {
     });
 
     it('should represent an instance', function(done) {
-      represent.as.json(user, 'public', function(err, representation) {
+      represent.as.pojo(user, 'public', function(err, representation) {
+        should.not.exist(err);
+        should.exist(representation);
         done();
       });
     });
