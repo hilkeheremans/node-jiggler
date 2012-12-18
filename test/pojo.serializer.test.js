@@ -58,6 +58,30 @@ describe('POJO Serializer', function() {
     });
   });
 
+  it('should represent an instance with object properties', function(done) {
+    var user = new User();
+    user.firstName = 'Davos';
+    user.car = {
+      year: 2001,
+      make: 'Ford'
+    };
+
+    represent.define(user, 'public', [
+      represent.Field('firstName'),
+      represent.Field('car')
+    ]);
+
+    represent.as.pojo(user, 'public', function(err, rep) {
+      should.not.exist(err);
+      should.exist(rep);
+
+      rep.should.have.property('firstName', 'Davos');
+      rep.should.have.property('car');
+
+      done();
+    });
+  });
+
   it('should represent an array', function(done) {
     var user = new User();
     user.firstName = 'Davos';
