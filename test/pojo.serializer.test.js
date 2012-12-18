@@ -80,5 +80,28 @@ describe('POJO Serializer', function() {
         done();
       });
     });
+
+    it('should represent an instance with a formatter', function(done) {
+      var user = new User();
+      user.firstName = 'Davos';
+      user.lastName = 'Seaworth';
+
+      represent.define(user, 'public', [
+        represent.Field('firstName', {
+          formatter: function(value) {
+            return value.charAt(0);
+          }
+        })
+      ]);
+
+      represent.as.pojo(user, 'public', function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        rep.should.have.property('firstName', 'D');
+
+        done();
+      });
+    });
   });
 });
