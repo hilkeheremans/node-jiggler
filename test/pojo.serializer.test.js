@@ -103,5 +103,48 @@ describe('POJO Serializer', function() {
         done();
       });
     });
+
+    it('should strip undefined values by default', function(done) {
+      var user = new User();
+      user.firstName = undefined;
+      user.lastName = 'Seaworth';
+
+      represent.define(user, 'public', [
+        represent.Field('firstName'),
+        represent.Field('lastName')
+      ]);
+
+      represent.as.pojo(user, 'public', function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        ('firstName' in rep).should.equal(false);
+        rep.should.have.property('lastName');
+
+        done();
+      });
+    });
+
+    it('should not strip undefined values if stripUndefined is set to false', function(done) {
+      var user = new User();
+      user.firstName = undefined;
+      user.lastName = 'Seaworth';
+
+      represent.define(user, 'public', [
+        represent.Field('firstName'),
+        represent.Field('lastName')
+      ]);
+
+      represent.as.pojo(user, 'public', {stripUndefined: false}, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        ('firstName' in rep).should.equal(true);
+        should.equal(undefined, rep.firstName);
+        rep.should.have.property('lastName');
+
+        done();
+      });
+    });
   });
 });
