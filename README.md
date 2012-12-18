@@ -1,6 +1,8 @@
 node-jiggler
 ==============
 
+[![Adventure Time Jiggler][http://a3094b75ef3de92d2032-5e0efc983ceed99b1f53c92d149fb2f5.r69.cf1.rackcdn.com/jiggler.gif]][http://comedycentral.com]
+
 jiggler provides a simple and flexible interface for creating serializable representations for your JavaScript objects.
 
 This is incredibly useful for REST API responses that need to transform and sanitize responses sent to clients. Rather than
