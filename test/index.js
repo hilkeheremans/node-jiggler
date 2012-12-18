@@ -1,4 +1,4 @@
-var represent = require('../lib/index')
+var jiggler = require('../lib/index')
     , should = require('should')
     , mocha = require('mocha');
 
@@ -11,11 +11,11 @@ describe('Represent', function() {
         this.lastName = '';
       };
 
-      represent.define(User, 'public', []);
+      jiggler.define(User, 'public', []);
 
       var newUser = new User();
-      newUser.should.have.property('_represent');
-      var r = newUser._represent;
+      newUser.should.have.property(jiggler.JIGGLER_KEY);
+      var r = newUser[jiggler.JIGGLER_KEY];
       r.public.should.be.a('object');
     });
 
@@ -25,10 +25,10 @@ describe('Represent', function() {
         lastName: ''
       };
 
-      represent.define(user, 'public', []);
+      jiggler.define(user, 'public', []);
 
-      user.should.have.property('_represent');
-      var r = user._represent;
+      user.should.have.property(jiggler.JIGGLER_KEY);
+      var r = user[jiggler.JIGGLER_KEY];
       r.public.should.be.a('object');
     });
 
@@ -38,27 +38,27 @@ describe('Represent', function() {
         lastName: ''
       };
 
-      represent.define(user, 'public', [
-        represent.Field('firstName')
+      jiggler.define(user, 'public', [
+        jiggler.Field('firstName')
       ]);
 
-      var r = user._represent;
+      var r = user[jiggler.JIGGLER_KEY];
       r.public.should.have.property('fields').with.lengthOf(1);
       var field = r.public.fields[0];
       field.should.have.property('name', 'firstName');
     })
   });
 
-  describe('represent', function() {
+  describe('jiggler', function() {
     var user = {
       firstName: '',
       lastName: ''
     };
 
-    represent.define(user, 'public', []);
+    jiggler.define(user, 'public', []);
 
     it('should add pojo serializer', function(done) {
-      represent.as.pojo(user, 'public', function(err, representation) {
+      jiggler.as.pojo(user, 'public', function(err, representation) {
         should.not.exist(err);
         should.exist(representation);
         done();
@@ -66,7 +66,7 @@ describe('Represent', function() {
     });
 
     it('should add json serializer', function(done) {
-      represent.as.json(user, 'public', function(err, representation) {
+      jiggler.as.json(user, 'public', function(err, representation) {
         should.not.exist(err);
         should.exist(representation);
         done();

@@ -4,7 +4,7 @@ var represent = require('../lib/index')
 
 describe('POJO Serializer', function() {
 
-  describe('represent', function() {
+  describe('jiggler', function() {
     var User = function() {
       this.firstName = '';
       this.lastName = '';
