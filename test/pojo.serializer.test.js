@@ -12,7 +12,7 @@ describe('POJO Serializer', function() {
 
     it('should require a template name', function() {
       var user = new User();
-      represent.define(user, 'public', {});
+      represent.define(user, 'public', []);
 
       (function() {
         represent.as.pojo(user, undefined, function() { });
@@ -21,7 +21,7 @@ describe('POJO Serializer', function() {
 
     it('should require a valid template name', function() {
       var user = new User();
-      represent.define(user, 'public', {});
+      represent.define(user, 'public', []);
 
       (function() {
         represent.as.pojo(user, 'alternative', function() { });
@@ -30,7 +30,7 @@ describe('POJO Serializer', function() {
 
     it('should accept optional arguments', function(done) {
       var user = new User();
-      represent.define(user, 'public', {});
+      represent.define(user, 'public', []);
 
       represent.as.pojo(user, 'public', {}, function(err, rep) {
         should.not.exist(err);
@@ -48,7 +48,7 @@ describe('POJO Serializer', function() {
           key: 'value'
         }
       };
-      represent.define(user, 'public', {});
+      represent.define(user, 'public', []);
 
       represent.as.pojo(user, 'public', {}, function(err, rep) {
         should.not.exist(err);
@@ -63,7 +63,7 @@ describe('POJO Serializer', function() {
       user.firstName = 'Davos';
       user.lastName = 'Seaworth';
 
-      represent.define(user, 'public', {});
+      represent.define(user, 'public', []);
 
       represent.as.pojo(user, 'public', function(err, rep) {
         should.not.exist(err);

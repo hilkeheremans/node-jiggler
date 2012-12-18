@@ -11,9 +11,7 @@ describe('Represent', function() {
         this.lastName = '';
       };
 
-      represent.define(User, 'public', {
-
-      });
+      represent.define(User, 'public', []);
 
       var newUser = new User();
       newUser.should.have.property('_represent');
@@ -27,14 +25,23 @@ describe('Represent', function() {
         lastName: ''
       };
 
-      represent.define(user, 'public', {
-
-      });
+      represent.define(user, 'public', []);
 
       user.should.have.property('_represent');
       var r = user._represent;
       r.public.should.be.a('function');
     });
+
+    it('should define fields in a representation', function() {
+      var user = {
+        firstName: '',
+        lastName: ''
+      };
+
+      represent.define(user, 'public', [
+        represent.Field('firstName')
+      ]);
+    })
   });
 
   describe('represent', function() {
@@ -43,9 +50,7 @@ describe('Represent', function() {
       lastName: ''
     };
 
-    represent.define(user, 'public', {
-
-    });
+    represent.define(user, 'public', []);
 
     it('should add pojo serializer', function(done) {
       represent.as.pojo(user, 'public', function(err, representation) {
