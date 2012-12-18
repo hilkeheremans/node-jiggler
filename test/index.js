@@ -16,7 +16,7 @@ describe('Represent', function() {
       var newUser = new User();
       newUser.should.have.property('_represent');
       var r = newUser._represent;
-      r.public.should.be.a('function');
+      r.public.should.be.a('object');
     });
 
     it('should add representations to an instance', function() {
@@ -29,7 +29,7 @@ describe('Represent', function() {
 
       user.should.have.property('_represent');
       var r = user._represent;
-      r.public.should.be.a('function');
+      r.public.should.be.a('object');
     });
 
     it('should define fields in a representation', function() {
@@ -41,6 +41,11 @@ describe('Represent', function() {
       represent.define(user, 'public', [
         represent.Field('firstName')
       ]);
+
+      var r = user._represent;
+      r.public.should.have.property('fields').with.lengthOf(1);
+      var field = r.public.fields[0];
+      field.should.have.property('name', 'firstName');
     })
   });
 
