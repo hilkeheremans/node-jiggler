@@ -3,7 +3,7 @@ node-jiggler
 
 ![Adventure Time Jiggler](http://a3094b75ef3de92d2032-5e0efc983ceed99b1f53c92d149fb2f5.r69.cf1.rackcdn.com/jiggler.gif)
 
-jiggler provides a simple and flexible interface for creating serializable representations for your JavaScript objects.
+jiggler provides a simple and flexible interface for creating serialized representations for your JavaScript objects.
 
 This is incredibly useful for REST API responses that need to transform and sanitize responses sent to clients. Rather than
 passing replacer methods to JSON.stringify or overloading the Mongoose toObject method you can define a more readable and flexible serialization templates.
@@ -17,7 +17,7 @@ the latter not providing enough flexibility for our required use cases.
 
 Let’s use the [Mongoose Blog Schema](http://mongoosejs.com) definition as an example:
 
-```
+```javascript
 var blogSchema = new Schema({
   title:  String,
   author: String,
@@ -35,7 +35,7 @@ var Blog = mongoose.model('Blog', blogSchema);
 
 Let’s define a representation that formats blog objects for API consumption:
 
-```
+```javascript
 var J = require('jiggler');
 
 J.define(Blog, 'public', [
@@ -53,7 +53,7 @@ Only fields specifically defined in a template will be rendered. In addition, yo
 
 ### Output
 
-```
+```javascript
 {
 	_id: "12345",
 	title: "A Song of Ice and Fire",
@@ -67,3 +67,13 @@ Only fields specifically defined in a template will be rendered. In addition, yo
 	hidden: "no"
 }
 ```
+
+## License
+
+The MIT License (MIT) Copyright (c) 2012 Heyride Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
