@@ -47,8 +47,16 @@ describe('Represent', function() {
 
     });
 
-    it('should represent an instance', function(done) {
+    it('should add pojo serializer', function(done) {
       represent.as.pojo(user, 'public', function(err, representation) {
+        should.not.exist(err);
+        should.exist(representation);
+        done();
+      });
+    });
+
+    it('should add json serializer', function(done) {
+      represent.as.json(user, 'public', function(err, representation) {
         should.not.exist(err);
         should.exist(representation);
         done();
