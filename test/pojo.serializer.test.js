@@ -7,6 +7,10 @@ describe('POJO Serializer', function() {
     this.firstName = '';
     this.lastName = '';
   };
+  var Car = function() {
+    this.year = 2012;
+    this.make = '';
+  };
 
   it('should require a template name', function() {
     var user = new User();
@@ -81,6 +85,34 @@ describe('POJO Serializer', function() {
       done();
     });
   });
+
+  it('should represent an instance with templated object properties', function(done) {
+    var user = new User();
+    user.firstName = 'Davos';
+    var car = new Car();
+    car.make = 'BMW';
+    user.car = car;
+
+    represent.define(user, 'public', [
+      represent.Field('firstName'),
+      represent.Field('car')
+    ]);
+    represent.define(car, 'public', []);
+
+    represent.as.pojo(user, 'public', function(err, rep) {
+      should.not.exist(err);
+      should.exist(rep);
+
+      rep.should.have.property('firstName', 'Davos');
+      rep.should.have.property('car');
+      rep.car.should.not.have.property('year');
+      rep.car.should.not.have.property('make');
+
+      done();
+    });
+  });
+
+  
 
   it('should represent an array', function(done) {
     var user = new User();
