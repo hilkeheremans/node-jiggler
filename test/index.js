@@ -13,9 +13,8 @@ describe('Jiggler', function() {
 
       J.define(User, 'public', []);
 
-      var newUser = new User();
-      newUser.should.have.property(J.JIGGLER_KEY);
-      var r = newUser[J.JIGGLER_KEY];
+      User.should.have.property(J.JIGGLER_KEY);
+      var r = User[J.JIGGLER_KEY];
       r.should.have.property('as');
       r.as.should.be.a('object');
       r.as.public.should.be.a('function');
@@ -40,14 +39,13 @@ describe('Jiggler', function() {
         this.firstName = '';
         this.lastName = '';
       };
-      var user = new User();
 
       J.define(User, 'public', [
         J.Field('firstName')
       ]);
 
 
-      var r = user[J.JIGGLER_KEY];
+      var r = User[J.JIGGLER_KEY];
       r.templates.public.should.have.property('fields').with.lengthOf(1);
       var field = r.templates.public.fields[0];
       field.should.have.property('name', 'firstName');
@@ -58,7 +56,6 @@ describe('Jiggler', function() {
         this.firstName = '';
         this.lastName = '';
       };
-      var user = new User();
 
       J.define(User, 'public', [
         J.Field('firstName')
@@ -67,7 +64,7 @@ describe('Jiggler', function() {
           J.Field('lastName')
       ], {extends: 'public'});
 
-      var r = user[J.JIGGLER_KEY];
+      var r = User[J.JIGGLER_KEY];
       r.templates.extended.should.have.property('fields').with.lengthOf(2);
       var field = r.templates.extended.fields[0];
       field.should.have.property('name', 'firstName');
@@ -90,7 +87,6 @@ describe('Jiggler', function() {
         this.firstName = '';
         this.lastName = '';
       };
-      var user = new User();
 
       J.define(User, 'public', [
         J.Field('firstName'),
@@ -104,7 +100,7 @@ describe('Jiggler', function() {
         })
       ], {extends: 'public'});
 
-      var r = user[J.JIGGLER_KEY];
+      var r = User[J.JIGGLER_KEY];
       r.templates.extended.should.have.property('fields').with.lengthOf(2);
       var field = r.templates.extended.fields[1];
       field.should.have.property('name', 'lastName');
@@ -113,57 +109,41 @@ describe('Jiggler', function() {
     });
   });
 
-//  describe('represent', function() {
-//
-//    var Car = function() {
-//      this.year = 2012;
-//      this.make = '';
-//    };
-//
-//    it('should require a template name', function() {
-//      var User = function() {
-//        this.firstName = '';
-//        this.lastName = '';
-//      };
-//      var user = new User();
-//      J.define(User, 'public', []);
-//
-//      (function() {
-//        J.represent(user, undefined, function() { });
-//      }).should.throw();
-//    });
-//
-//    it('should require a valid template name', function() {
-//      var User = function() {
-//        this.firstName = '';
-//        this.lastName = '';
-//      };
-//      var user = new User();
-//      J.define(User, 'public', []);
-//
-//      (function() {
-//        J.represent(user, 'alternative', function() { });
-//      }).should.throw();
-//    });
-//
-//    it('should accept optional arguments', function(done) {
-//      var User = function() {
-//        this.firstName = '';
-//        this.lastName = '';
-//      };
-//      var user = new User();
-//      J.define(User, 'public', []);
-//
-//      var test = {
-//        test: 'foo'
-//      };
-//
-//      J.represent(user, 'public', {}, function(err, rep) {
-//        should.not.exist(err);
-//        should.exist(rep);
-//        done();
-//      });
-//    });
+  describe('as', function() {
+
+    var Car = function() {
+      this.year = 2012;
+      this.make = '';
+    };
+
+
+    it('should require a valid template name', function() {
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
+      };
+      J.define(User, 'public', []);
+
+      (function() {
+        var user = new User();
+        User[J.JIGGLER_KEY].as.alternative(user, function() { });
+      }).should.throw();
+    });
+
+    it('should accept optional arguments', function(done) {
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
+      };
+      J.define(User, 'public', []);
+
+      var user = new User();
+      User[J.JIGGLER_KEY].as.public(user, {}, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+        done();
+      });
+    });
 //
 //    it('should represent an instance with simple properties', function(done) {
 //      var User = function() {
@@ -374,5 +354,5 @@ describe('Jiggler', function() {
 //        done();
 //      });
 //    });
-//  });
+  });
 });
