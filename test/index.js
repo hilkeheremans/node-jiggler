@@ -1,4 +1,4 @@
-var jiggler = require('../lib/index')
+var J = require('../lib/index')
     , should = require('should')
     , mocha = require('mocha');
 
@@ -11,57 +11,58 @@ describe('Represent', function() {
         this.lastName = '';
       };
 
-      jiggler.define(User, 'public', []);
+      J.define(User, 'public', []);
 
       var newUser = new User();
-      newUser.should.have.property(jiggler.JIGGLER_KEY);
-      var r = newUser[jiggler.JIGGLER_KEY];
+      newUser.should.have.property(J.JIGGLER_KEY);
+      var r = newUser[J.JIGGLER_KEY];
       r.public.should.be.a('object');
     });
 
-    it('should add representations to an instance', function() {
+    it('should not add representations to an instance', function() {
       var user = {
         firstName: '',
         lastName: ''
       };
 
-      jiggler.define(user, 'public', []);
-
-      user.should.have.property(jiggler.JIGGLER_KEY);
-      var r = user[jiggler.JIGGLER_KEY];
-      r.public.should.be.a('object');
+      (function() {
+        J.define(user, 'public', []);
+      }).should.throw();
     });
 
     it('should define fields in a representation', function() {
-      var user = {
-        firstName: '',
-        lastName: ''
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
       };
+      var user = new User();
 
-      jiggler.define(user, 'public', [
-        jiggler.Field('firstName')
+      J.define(User, 'public', [
+        J.Field('firstName')
       ]);
 
-      var r = user[jiggler.JIGGLER_KEY];
+
+      var r = user[J.JIGGLER_KEY];
       r.public.should.have.property('fields').with.lengthOf(1);
       var field = r.public.fields[0];
       field.should.have.property('name', 'firstName');
     });
 
     it('should create extended representations', function() {
-      var user = {
-        firstName: '',
-        lastName: ''
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
       };
+      var user = new User();
 
-      jiggler.define(user, 'public', [
-        jiggler.Field('firstName')
+      J.define(User, 'public', [
+        J.Field('firstName')
       ]);
-      jiggler.define(user, 'extended', [
-          jiggler.Field('lastName')
+      J.define(User, 'extended', [
+          J.Field('lastName')
       ], {extends: 'public'});
 
-      var r = user[jiggler.JIGGLER_KEY];
+      var r = user[J.JIGGLER_KEY];
       r.extended.should.have.property('fields').with.lengthOf(2);
       var field = r.extended.fields[0];
       field.should.have.property('name', 'firstName');
@@ -70,34 +71,35 @@ describe('Represent', function() {
     });
 
     it('should throw if the extended template does not exist', function() {
-      var user = {};
+      var User = function(){};
 
-      jiggler.define(user, 'public', []);
+      J.define(User, 'public', []);
 
       (function() {
-        jiggler.define(user, 'extended', [], {extends: 'undefined'});
+        J.define(User, 'extended', [], {extends: 'undefined'});
       }).should.throw();
     });
 
     it('should allow extended representations to override base implementations', function() {
-      var user = {
-        firstName: '',
-        lastName: ''
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
       };
+      var user = new User();
 
-      jiggler.define(user, 'public', [
-        jiggler.Field('firstName'),
-        jiggler.Field('lastName')
+      J.define(User, 'public', [
+        J.Field('firstName'),
+        J.Field('lastName')
       ]);
-      jiggler.define(user, 'extended', [
-        jiggler.Field('lastName', {
+      J.define(User, 'extended', [
+        J.Field('lastName', {
           formatter: function(value) {
             return value.charAt(0);
           }
         })
       ], {extends: 'public'});
 
-      var r = user[jiggler.JIGGLER_KEY];
+      var r = user[J.JIGGLER_KEY];
       r.extended.should.have.property('fields').with.lengthOf(2);
       var field = r.extended.fields[1];
       field.should.have.property('name', 'lastName');
@@ -106,16 +108,17 @@ describe('Represent', function() {
     });
   });
 
-  describe('jiggler', function() {
-    var user = {
-      firstName: '',
-      lastName: ''
+  describe('J', function() {
+    var User = function() {
+      this.firstName = '';
+      this.lastName = '';
     };
+    var user = new User();
 
-    jiggler.define(user, 'public', []);
+    J.define(User, 'public', []);
 
     it('should add pojo serializer', function(done) {
-      jiggler.as.pojo(user, 'public', function(err, representation) {
+      J.as.pojo(user, 'public', function(err, representation) {
         should.not.exist(err);
         should.exist(representation);
         done();
@@ -123,7 +126,7 @@ describe('Represent', function() {
     });
 
     it('should add json serializer', function(done) {
-      jiggler.as.json(user, 'public', function(err, representation) {
+      J.as.json(user, 'public', function(err, representation) {
         should.not.exist(err);
         should.exist(representation);
         done();
