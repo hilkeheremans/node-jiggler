@@ -342,6 +342,55 @@ describe('Jiggler', function() {
       });
     });
 
+    it('should represent an instance with a src function', function(done) {
+      var User = function() {
+        this.firstName = '';
+      };
+      var user = new User();
+      user.firstName = 'Davos';
+
+      J.define('user_public', [
+        J.Field('relationship', {
+          src: function(object, context, callback) {
+            callback(null, 'friend')
+          }
+        })
+      ]);
+
+      J.as.user_public(user, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        rep.should.have.property('relationship', 'friend');
+
+        done();
+      });
+    });
+
+    it('should allow context to be sent to a src function', function(done) {
+      var User = function() {
+        this.firstName = '';
+      };
+      var user = new User();
+      user.firstName = 'Davos';
+
+      J.define('user_public', [
+        J.Field('relationship', {
+          src: function(object, context, callback) {
+            should.exist(context);
+            context.should.have.property('ctx', 'value');
+            callback(null, 'friend')
+          }
+        })
+      ]);
+
+      J.as.user_public(user, {context: {ctx: 'value'}}, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+        done();
+      });
+    });
+
     it('should not call formatter if the value is undefined', function(done) {
       var User = function() {
         this.firstName = '';
