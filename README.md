@@ -5,15 +5,20 @@
 node-jiggler
 ==============
 
-jiggler provides a simple and flexible interface for creating serialized representations for your JavaScript objects.
+jiggler provides a simple and flexible interface for defining representations for your JavaScript objects. This allows for
+separating the concern of how models are used and stored in your application layer with how they are presented to endpoints such
+as REST API clients.
 
-This is incredibly useful for REST API responses that need to transform and sanitize responses sent to clients. Rather than
-passing replacer methods to JSON.stringify or overloading the Mongoose toObject method you can define a more readable and flexible serialization templates.
-
-We use it in production at [Heyride](http://heyride.com) for serializing all of our REST API responses.
+Jiggler is framework agnostic and works with any object oriented approach to model declaration.
+We use it in production at [Heyride](http://heyride.com) for serializing all of our REST API responses which are derived from
+Mongoose objects.
 
 It is loosely based on the ruby [acts_as_api](https://github.com/fabrik42/acts_as_api) gem and [node-swiz](https://github.com/racker/node-swiz),
 the latter not providing enough flexibility for our required use cases.
+
+This package does not handle serialization of object representations. The most common use case is to produce a JSON string
+from a representation and this is easily done with a single call to JSON.stringify(). It would be fairly straightforward to
+add support for serializers (including XML). We welcome pull requests.
 
 ## Example
 
@@ -71,7 +76,7 @@ var post = new Blog({
 });
 
 // Apply the representation template
-J.as.pojo(post, 'public', {}, function(err, rep) {
+Blog.jiggle.as.public(post, {}, function(err, rep) {
 	console.log(rep);
 });
 ```
@@ -92,6 +97,25 @@ J.as.pojo(post, 'public', {}, function(err, rep) {
 	hidden: "no"
 }
 ```
+
+# To be documented
+## Registering Templates
+
+Can only added to classes.
+
+Can create extensions on existing templates. Can also override behavior in an extended template.
+
+## Serializers
+
+Currently there is Pojo and JSON.
+Would be easy enough to add other serializers by placing them in the serializers folder where they are automatically registered.
+
+## POJO Serializer
+
+The starting point for other serializers. Runs formatters and creates the representative object based on the template specific.
+Can serialize an object or array of objects.
+Strips undefined values by default but can turn on undefined values
+
 
 ## License
 
