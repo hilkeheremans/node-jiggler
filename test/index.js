@@ -191,6 +191,42 @@ describe('Jiggler', function() {
       });
     });
 
+    it('should represent an object property with a template', function(done) {
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
+      };
+      var Car = function() {
+        this.year = 2012;
+        this.make = '';
+      };
+      var user = new User();
+      user.firstName = 'Davos';
+      var car = new Car();
+      car.make = 'BMW';
+      user.car = car;
+
+      J.define(User, 'public', [
+        J.Field('firstName'),
+        J.Field('car')
+      ]);
+      J.define(Car, 'public', [
+        J.Field('make')
+      ]);
+
+      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        rep.should.have.property('firstName', 'Davos');
+        rep.should.have.property('car');
+        rep.car.should.not.have.property('year');
+        rep.car.should.have.property('make', 'BMW');
+
+        done();
+      });
+    });
+
     it('should represent an instance property with an alternative template', function(done) {
       var User = function() {
         this.firstName = '';
