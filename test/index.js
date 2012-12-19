@@ -5,49 +5,19 @@ var J = require('../lib/index')
 describe('Jiggler', function() {
 
   describe('define', function() {
-    it('should add representations to a class', function() {
-      var User = function() {
-        this.firstName = '';
-        this.lastName = '';
-      };
-
-      J.define(User, 'public', []);
-
-      User.should.have.property(J.JIGGLER_KEY);
-      var r = User[J.JIGGLER_KEY];
-      r.should.have.property('as');
-      r.as.should.be.a('object');
-      r.as.public.should.be.a('function');
-      r.should.have.property('templates');
-      r.templates.should.be.a('object');
-      r.templates.public.should.be.a('object');
-    });
-
-    it('should not add representations to an instance', function() {
-      var user = {
-        firstName: '',
-        lastName: ''
-      };
-
-      (function() {
-        J.define(user, 'public', []);
-      }).should.throw();
-    });
-
     it('should define fields in a representation', function() {
       var User = function() {
         this.firstName = '';
         this.lastName = '';
       };
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName')
       ]);
 
 
-      var r = User[J.JIGGLER_KEY];
-      r.templates.public.should.have.property('fields').with.lengthOf(1);
-      var field = r.templates.public.fields[0];
+      J.templates.user_public.should.have.property('fields').with.lengthOf(1);
+      var field = J.templates.user_public.fields[0];
       field.should.have.property('name', 'firstName');
     });
 
@@ -57,28 +27,27 @@ describe('Jiggler', function() {
         this.lastName = '';
       };
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName')
       ]);
-      J.define(User, 'extended', [
+      J.define('user_extended', [
           J.Field('lastName')
-      ], {extends: 'public'});
+      ], {extends: 'user_public'});
 
-      var r = User[J.JIGGLER_KEY];
-      r.templates.extended.should.have.property('fields').with.lengthOf(2);
-      var field = r.templates.extended.fields[0];
+      J.templates.user_extended.should.have.property('fields').with.lengthOf(2);
+      var field = J.templates.user_extended.fields[0];
       field.should.have.property('name', 'firstName');
-      field = r.templates.extended.fields[1];
+      field = J.templates.user_extended.fields[1];
       field.should.have.property('name', 'lastName');
     });
 
     it('should throw if the extended template does not exist', function() {
       var User = function(){};
 
-      J.define(User, 'public', []);
+      J.define('user_public', []);
 
       (function() {
-        J.define(User, 'extended', [], {extends: 'undefined'});
+        J.define('user_extended', [], {extends: 'undefined'});
       }).should.throw();
     });
 
@@ -88,21 +57,20 @@ describe('Jiggler', function() {
         this.lastName = '';
       };
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
         J.Field('lastName')
       ]);
-      J.define(User, 'extended', [
+      J.define('user_extended', [
         J.Field('lastName', {
           formatter: function(value) {
             return value.charAt(0);
           }
         })
-      ], {extends: 'public'});
+      ], {extends: 'user_public'});
 
-      var r = User[J.JIGGLER_KEY];
-      r.templates.extended.should.have.property('fields').with.lengthOf(2);
-      var field = r.templates.extended.fields[1];
+      J.templates.user_extended.should.have.property('fields').with.lengthOf(2);
+      var field = J.templates.user_extended.fields[1];
       field.should.have.property('name', 'lastName');
       field.should.have.property('formatter');
       field.formatter.should.be.a('function');
@@ -115,11 +83,11 @@ describe('Jiggler', function() {
         this.firstName = '';
         this.lastName = '';
       };
-      J.define(User, 'public', []);
+      J.define('user_public', []);
 
       (function() {
         var user = new User();
-        User[J.JIGGLER_KEY].as.alternative(user, function() { });
+        J.as.alternative(user, function() { });
       }).should.throw();
     });
 
@@ -128,10 +96,10 @@ describe('Jiggler', function() {
         this.firstName = '';
         this.lastName = '';
       };
-      J.define(User, 'public', []);
+      J.define('user_public', []);
 
       var user = new User();
-      User[J.JIGGLER_KEY].as.public(user, {}, function(err, rep) {
+      J.as.user_public(user, {}, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
         done();
@@ -147,12 +115,12 @@ describe('Jiggler', function() {
       user.firstName = 'Davos';
       user.lastName = 'Seaworth';
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
         J.Field('lastName')
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -175,12 +143,12 @@ describe('Jiggler', function() {
         make: 'Ford'
       };
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
         J.Field('car')
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -206,15 +174,15 @@ describe('Jiggler', function() {
       car.make = 'BMW';
       user.car = car;
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
-        J.Field('car')
+        J.Field('car', {template: 'car_public'})
       ]);
-      J.define(Car, 'public', [
+      J.define('car_public', [
         J.Field('make')
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -225,6 +193,36 @@ describe('Jiggler', function() {
 
         done();
       });
+    });
+
+    it('should require an existing template for an object property', function() {
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
+      };
+      var Car = function() {
+        this.year = 2012;
+        this.make = '';
+      };
+      var user = new User();
+      user.firstName = 'Davos';
+      var car = new Car();
+      car.make = 'BMW';
+      user.car = car;
+
+      J.define('user_public', [
+        J.Field('firstName'),
+        J.Field('car', {template: 'something_bad'})
+      ]);
+      J.define('car_public', [
+        J.Field('make')
+      ]);
+
+      (function() {
+        J.as.user_public(user, function(err, rep) {
+
+        });
+      }).should.throw('A template named "something_bad" is not defined');
     });
 
     it('should represent an instance property with an alternative template', function(done) {
@@ -242,13 +240,13 @@ describe('Jiggler', function() {
       car.make = 'BMW';
       user.car = car;
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
-        J.Field('car', {template: 'different'})
+        J.Field('car', {template: 'car_different'})
       ]);
-      J.define(Car, 'different', []);
+      J.define('car_different', []);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -277,9 +275,9 @@ describe('Jiggler', function() {
         J.Field('firstName'),
         J.Field('lastName')
       ];
-      J.define(User, 'public', fields);
+      J.define('user_public', fields);
 
-      User[J.JIGGLER_KEY].as.public([user, user2], function(err, rep) {
+      J.as.user_public([user, user2], function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -301,11 +299,11 @@ describe('Jiggler', function() {
         test: ['one', 'two']
       };
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('test')
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -326,7 +324,7 @@ describe('Jiggler', function() {
       user.firstName = 'Davos';
       user.lastName = 'Seaworth';
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName', {
           formatter: function(value) {
             return value.charAt(0);
@@ -334,7 +332,7 @@ describe('Jiggler', function() {
         })
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -353,12 +351,12 @@ describe('Jiggler', function() {
       user.firstName = undefined;
       user.lastName = 'Seaworth';
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
         J.Field('lastName')
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, function(err, rep) {
+      J.as.user_public(user, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
@@ -378,12 +376,12 @@ describe('Jiggler', function() {
       user.firstName = undefined;
       user.lastName = 'Seaworth';
 
-      J.define(User, 'public', [
+      J.define('user_public', [
         J.Field('firstName'),
         J.Field('lastName')
       ]);
 
-      User[J.JIGGLER_KEY].as.public(user, {stripUndefined: false}, function(err, rep) {
+      J.as.user_public(user, {stripUndefined: false}, function(err, rep) {
         should.not.exist(err);
         should.exist(rep);
 
