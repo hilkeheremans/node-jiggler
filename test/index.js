@@ -358,23 +358,5 @@ describe('Jiggler', function() {
         done();
       });
     });
-//  });
-//
-//  describe('as', function() {
-//    var User = function() {
-//      this.firstName = '';
-//      this.lastName = '';
-//    };
-//    var user = new User();
-//
-//    J.define(User, 'public', []);
-//
-//    it('should add json serializer', function(done) {
-//      J.as.json(user, 'public', function(err, representation) {
-//        should.not.exist(err);
-//        should.exist(representation);
-//        done();
-//      });
-//    });
   });
 });
