@@ -342,6 +342,35 @@ describe('Jiggler', function() {
       });
     });
 
+    it('should not call formatter if the value is undefined', function(done) {
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
+      };
+      var user = new User();
+      user.firstName = undefined;
+      user.lastName = 'Seaworth';
+
+      var calledFormatter = false;
+      J.define('user_public', [
+        J.Field('firstName', {
+          formatter: function(value) {
+            calledFormatter = true;
+            return value.charAt(0);
+          }
+        })
+      ]);
+
+      J.as.user_public(user, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        calledFormatter.should.equal(false);
+
+        done();
+      });
+    });
+
     it('should strip undefined values by default', function(done) {
       var User = function() {
         this.firstName = '';
