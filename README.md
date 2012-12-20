@@ -101,6 +101,7 @@ J.as.blog_public(post, {}, function(err, rep) {
 # To be documented
 ## Registering Templates
 
+Can represent arrays as well as objects
 Can create extensions on existing templates. Can also override behavior in an extended template.
 Can provide field options such as src, format and template
 
