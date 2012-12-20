@@ -1,0 +1,5 @@
+JasmineAdapter-1.1.2.js
+jasmine-1.1.0.js
+node_modules
+.git*
+.idea

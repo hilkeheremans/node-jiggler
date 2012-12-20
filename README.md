@@ -45,7 +45,7 @@ Let’s define a representation that formats blog objects for API consumption. O
 ```javascript
 var J = require('jiggler');
 
-J.define(Blog, 'public', [
+J.define('blog_public', [
     J.Field('_id'),
     J.Field('title'),
     J.Field('author'),
@@ -76,7 +76,7 @@ var post = new Blog({
 });
 
 // Apply the representation template
-Blog.jiggle.as.public(post, {}, function(err, rep) {
+J.as.blog_public(post, {}, function(err, rep) {
 	console.log(rep);
 });
 ```
@@ -101,9 +101,8 @@ Blog.jiggle.as.public(post, {}, function(err, rep) {
 # To be documented
 ## Registering Templates
 
-Can only added to classes.
-
 Can create extensions on existing templates. Can also override behavior in an extended template.
+Can provide field options such as src, format and template
 
 
 ## License
