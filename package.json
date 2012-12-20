@@ -1,9 +1,14 @@
 {
   "author": "Heyride Inc.",
+  "contributors": [
+      "Brian Romanko @bromanko"
+  ],
   "name": "jiggler",
-  "version": "0.0.0",
+  "description": "jiggler provides a simple and flexible interface for defining representations for your JavaScript objects.",
+  "version": "0.0.2",
   "repository": {
-    "url": "https://github.com/Heyride/node-jiggler.git"
+    "type": "git",
+    "url": "git://github.com/Heyride/node-jiggler.git"
   },
   "main": "lib/index.js",
   "directories": {
