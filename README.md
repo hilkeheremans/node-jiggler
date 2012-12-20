@@ -105,17 +105,6 @@ Can only added to classes.
 
 Can create extensions on existing templates. Can also override behavior in an extended template.
 
-## Serializers
-
-Currently there is Pojo and JSON.
-Would be easy enough to add other serializers by placing them in the serializers folder where they are automatically registered.
-
-## POJO Serializer
-
-The starting point for other serializers. Runs formatters and creates the representative object based on the template specific.
-Can serialize an object or array of objects.
-Strips undefined values by default but can turn on undefined values
-
 
 ## License
 
