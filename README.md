@@ -177,11 +177,7 @@ J.Field('relationship', {
 
 ```
 
-
-# To be documented
-
-Can create extensions on existing templates. Can also override behavior in an extended template.
-Can provide field options such as src, format and template
+See the unit tests for additional examples.
 
 
 ## License
