@@ -5,7 +5,7 @@
 node-jiggler
 ==============
 
-jiggler provides a simple and flexible interface for defining representations for your JavaScript objects. This allows for
+Jiggler provides a simple and flexible interface for defining representations for your JavaScript objects. This allows for
 separating the concern of how models are used and stored in your application layer with how they are presented to endpoints such
 as REST API clients.
 
@@ -131,8 +131,54 @@ J.as.blog_public([post, post], {}, function(err, rep) {
 ]
 ```
 
-# To be documented
 ## Registering Templates
+
+Templates are registered using the ```define``` method. You must provide a name for the template and an array of field definitions. 
+Simple template inheritence is allowed by passing an options hash including a key of extends and a value which is the name of a previously defined template:
+
+```javascript
+J.define('blog_private', [
+    	J.Field('privateNotes'),
+    ], 
+    {extends: 'blog_public'}
+);
+```
+
+If a field is redefined in an extension template, the most inherited version of the field will be used.
+
+## Field Definitions
+
+Field definitions are defined using the Field factory provided when requiring jiggler. In all examples we have referenced this factory as ```J.Field```.
+
+Fields require a name and a variety of options may also be specified to control representation output including attaching virtual properties and formatted properties:
+
+```javascript
+
+// Include the source key 'fieldName' in the representation object
+J.Field('fieldName')
+
+// Include the source key 'anObject' and represent it using the template 'a_template'
+J.Field('anObject', {template: 'a_template'})
+
+// Include the source key 'firstName' and format the value using the provided function
+J.Field('firstName', {
+	formatter: function(value) {
+		return value.charAt(0);
+	}
+})
+
+// Include a represented key 'relationship' and populate it using the specified function
+// The complete source object and a representation context is passed 
+J.Field('relationship', {
+	src: function(object, context, callback) {
+		callback(null, 'friend')
+	}
+})
+
+```
+
+
+# To be documented
 
 Can create extensions on existing templates. Can also override behavior in an extended template.
 Can provide field options such as src, format and template
