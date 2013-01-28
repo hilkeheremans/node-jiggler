@@ -57,7 +57,7 @@ J.define('blog_public', [
     })
 ```
 
-Now we can render a representation of a blog object using this template:
+Now we can render a representation of a blog object (or an array of blog objects) using this template:
 
 ```javascript
 // Create the blog instance
@@ -79,6 +79,12 @@ var post = new Blog({
 J.as.blog_public(post, {}, function(err, rep) {
 	console.log(rep);
 });
+
+// Or represent an array of posts
+J.as.blog_public([post, post], {}, function(err, rep) {
+	console.log(rep);
+})
+
 ```
 
 ### Output
@@ -96,12 +102,38 @@ J.as.blog_public(post, {}, function(err, rep) {
 	],
 	hidden: "no"
 }
+
+[
+	{
+		_id: "12345",
+		title: "A Song of Ice and Fire",
+		author: "George R. R. Martin",
+		comments: [
+			{
+				body: "I love this one!",
+				date: Tue Dec 18 2012 15:14:34 GMT-0600 (CST)
+			}
+		],
+		hidden: "no"
+	},
+	{
+		_id: "12345",
+		title: "A Song of Ice and Fire",
+		author: "George R. R. Martin",
+		comments: [
+			{
+				body: "I love this one!",
+				date: Tue Dec 18 2012 15:14:34 GMT-0600 (CST)
+			}
+		],
+		hidden: "no"
+	}
+]
 ```
 
 # To be documented
 ## Registering Templates
 
-Can represent arrays as well as objects
 Can create extensions on existing templates. Can also override behavior in an extended template.
 Can provide field options such as src, format and template
 
