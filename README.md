@@ -1,11 +1,11 @@
-![Adventure Time Jiggler](http://a3094b75ef3de92d2032-5e0efc983ceed99b1f53c92d149fb2f5.r69.cf1.rackcdn.com/jiggler.gif)
+![Adventure Time Jiggler](http://i.imgur.com/XUI33tj.gif)
 
 *The Jiggler is © 2012 Cartoon Network*
 
 node-jiggler
 ==============
 
-jiggler provides a simple and flexible interface for defining representations for your JavaScript objects. This allows for
+Jiggler provides a simple and flexible interface for defining representations for your JavaScript objects. This allows for
 separating the concern of how models are used and stored in your application layer with how they are presented to endpoints such
 as REST API clients.
 
@@ -57,7 +57,7 @@ J.define('blog_public', [
     })
 ```
 
-Now we can render a representation of a blog object using this template:
+Now we can render a representation of a blog object (or an array of blog objects) using this template:
 
 ```javascript
 // Create the blog instance
@@ -79,6 +79,12 @@ var post = new Blog({
 J.as.blog_public(post, {}, function(err, rep) {
 	console.log(rep);
 });
+
+// Or represent an array of posts
+J.as.blog_public([post, post], {}, function(err, rep) {
+	console.log(rep);
+})
+
 ```
 
 ### Output
@@ -96,19 +102,87 @@ J.as.blog_public(post, {}, function(err, rep) {
 	],
 	hidden: "no"
 }
+
+[
+	{
+		_id: "12345",
+		title: "A Song of Ice and Fire",
+		author: "George R. R. Martin",
+		comments: [
+			{
+				body: "I love this one!",
+				date: Tue Dec 18 2012 15:14:34 GMT-0600 (CST)
+			}
+		],
+		hidden: "no"
+	},
+	{
+		_id: "12345",
+		title: "A Song of Ice and Fire",
+		author: "George R. R. Martin",
+		comments: [
+			{
+				body: "I love this one!",
+				date: Tue Dec 18 2012 15:14:34 GMT-0600 (CST)
+			}
+		],
+		hidden: "no"
+	}
+]
 ```
 
-# To be documented
 ## Registering Templates
 
-Can represent arrays as well as objects
-Can create extensions on existing templates. Can also override behavior in an extended template.
-Can provide field options such as src, format and template
+Templates are registered using the ```define``` method. You must provide a name for the template and an array of field definitions. 
+Simple template inheritence is allowed by passing an options hash including a key of extends and a value which is the name of a previously defined template:
+
+```javascript
+J.define('blog_private', [
+    	J.Field('privateNotes'),
+    ], 
+    {extends: 'blog_public'}
+);
+```
+
+If a field is redefined in an extension template, the most inherited version of the field will be used.
+
+## Field Definitions
+
+Field definitions are defined using the Field factory provided when requiring jiggler. In all examples we have referenced this factory as ```J.Field```.
+
+Fields require a name and a variety of options may also be specified to control representation output including attaching virtual properties and formatted properties:
+
+```javascript
+
+// Include the source key 'fieldName' in the representation object
+J.Field('fieldName')
+
+// Include the source key 'anObject' and represent it using the template 'a_template'
+J.Field('anObject', {template: 'a_template'})
+
+// Include the source key 'firstName' and format the value using the provided function
+J.Field('firstName', {
+	formatter: function(value) {
+		return value.charAt(0);
+	}
+})
+
+// Include a represented key 'relationship' and populate it using the specified function
+// The complete source object and a representation context is passed 
+J.Field('relationship', {
+	src: function(object, context, callback) {
+		callback(null, 'friend')
+	}
+})
+
+```
+
+See the unit tests for additional examples.
 
 
 ## License
 
-The MIT License (MIT) Copyright (c) 2012 Heyride Inc.
+The MIT License (MIT) Copyright (c) 2012 Brian Romanko.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
