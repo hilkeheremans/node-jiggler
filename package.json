@@ -2,7 +2,7 @@
   "author": "Brian Romanko @bromanko.",
   "name": "jiggler",
   "description": "jiggler provides a simple and flexible interface for defining representations for your JavaScript objects.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "git://github.com/bromanko/node-jiggler.git"
