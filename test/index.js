@@ -342,6 +342,27 @@ describe('Jiggler', function() {
       });
     });
 
+    it('should map a representation to a src property via a string argument', function(done) {
+      var User = function() {
+        this.firstName = '';
+      };
+      var user = new User();
+      user.firstName = 'Davos';
+
+      J.define('user_public', [
+        J.Field('firsty', 'firstName')
+      ]);
+
+      J.as.user_public(user, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        rep.should.have.property('firsty', 'Davos');
+
+        done();
+      });
+    });
+
     it('should represent an instance with a src function', function(done) {
       var User = function() {
         this.firstName = '';
