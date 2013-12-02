@@ -471,4 +471,45 @@ describe('Jiggler', function() {
       });
     });
   });
+
+  describe('converters', function(){
+    it('should have converters', function() {
+      J.should.have.property('convert');
+      J.convert.should.have.property('underscore');
+      J.convert.underscore.should.be.function;
+    });
+
+    it('should convert camelCase to underscore', function(done) {
+      var User = function() {
+        this.firstName = '';
+        this.lastName = '';
+        this.homeAddress = {};
+        this.highSchools = [];
+      };
+      var user = new User();
+      user.firstName = 'Davos';
+      user.lastName = 'Seaworth';
+      user.homeAddress = {
+        streetLine1: 'test',
+        streetLine2: 'test 2'
+      };
+      user.highSchools.push({
+        graduationYear: 2001
+      });
+
+      J.convert.underscore(user, function(err, rep) {
+        should.not.exist(err);
+        should.exist(rep);
+
+        rep.should.have.property('first_name', 'Davos');
+        rep.should.have.property('last_name', 'Seaworth');
+        rep.should.have.property('home_address');
+        rep.home_address.should.have.property('street_line1', 'test');
+        rep.home_address.should.have.property('street_line2', 'test 2');
+        rep.should.have.property('high_schools');
+        rep.high_schools[0].should.have.property('graduation_year', 2001);
+        done();
+      });
+    });
+  });
 });
