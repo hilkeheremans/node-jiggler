@@ -517,6 +517,9 @@ describe('Jiggler', function() {
       user.highSchools.push({
         graduationYear: 2001
       });
+      user.highSchools.push({
+        graduationYear: 2010
+      });
 
       J.convert.underscore(user, function(err, rep) {
         should.not.exist(err);
@@ -528,6 +531,7 @@ describe('Jiggler', function() {
         rep.home_address.should.have.property('street_line1', 'test');
         rep.home_address.should.have.property('street_line2', 'test 2');
         rep.should.have.property('high_schools');
+        rep.high_schools.should.be.instanceOf(Array);
         rep.high_schools[0].should.have.property('graduation_year', 2001);
         done();
       });
