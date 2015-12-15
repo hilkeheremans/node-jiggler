@@ -2,7 +2,7 @@
 
 *The Jiggler is © 2012 Cartoon Network*
 
-node-jiggler
+node-jiggler (as forked by hilkeheremans)
 ==============
 
 Jiggler provides a simple and flexible interface for defining representations for your JavaScript objects. This allows for
@@ -19,6 +19,12 @@ the latter not providing enough flexibility for our required use cases.
 This package does not handle serialization of object representations. The most common use case is to produce a JSON string
 from a representation and this is easily done with a single call to JSON.stringify(). It would be fairly straightforward to
 add support for serializers (including XML). We welcome pull requests.
+
+## Changes in this fork
+* Jiggler now stores its templates a little differently. It is now possible to store templates using a path instead of just a template name
+* Paths are stored using the usual dot notation.
+* WARNING: unfortunately, this also breaks Jiggler's API. Instead of calling J.template[key] and J.as[key] you must now call J.template(path) and J.as(path, value) (function calls instead of accessors).
+* Tests have been updated accordingly.
 
 ## Example
 
