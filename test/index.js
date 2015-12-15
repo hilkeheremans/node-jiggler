@@ -23,13 +23,13 @@ describe('Jiggler', function() {
 
     it('should be able to define fields with metadata', function() {
       J.define('user_public', [
-        J.Field('firstName', {type: 'string', description: 'the first name'})
+        J.Field('firstName', {type: String, description: 'the first name'})
       ]);
 
       J.templates.user_public.should.have.property('fields').with.lengthOf(1);
       var field = J.templates.user_public.fields[0];
       field.should.have.property('name', 'firstName');
-      field.should.have.property('type', 'string');
+      field.should.have.property('type', String);
       field.should.have.property('description', 'the first name');
     });
 
