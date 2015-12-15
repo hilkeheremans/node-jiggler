@@ -23,8 +23,53 @@ add support for serializers (including XML). We welcome pull requests.
 ## Changes in this fork
 * Jiggler now stores its templates a little differently. It is now possible to store templates using a path instead of just a template name
 * Paths are stored using the usual dot notation.
-* WARNING: unfortunately, this also breaks Jiggler's API. Instead of calling J.template[key] and J.as[key] you must now call J.template(path) and J.as(path, value) (function calls instead of accessors).
+* Template retrieval, when called with J.templatesWildcard instead of J.templates, also supports wildcard notation, as defined in J.wildcard. This defaults to *. Exact matches trump wildcard matches.
 * Tests have been updated accordingly.
+* WARNING: unfortunately, this also breaks Jiggler's API. Instead of calling J.template[key] and J.as[key] you must now call J.template(path) and J.as(path, value) (function calls instead of accessors).
+* WARNING: The implementation relies on lodash's set function, which seems to have a bug/design choice that causes problems when you use numbers in a path segment. Ie do not use this.is.path.1, use this.is.path._1 instead.
+
+### Example of change in fork
+```javascript
+
+var J = require('jiggler');
+
+// define v1 for public blog representation
+J.define('blog.public.v1', [
+    J.Field('_id'),
+    J.Field('title'),
+    J.Field('author'),
+    J.Field('comments'),
+    J.Field('hidden', {
+    	formatter: function(value) {
+    		return value ? 'yes' : 'no';
+    	}
+    })
+    
+// define all other blog representations for v1 (eg private, admin, whatever)
+J.define('blog.*.v1', [
+    J.Field('_id'),
+    J.Field('title'),
+    J.Field('author'),
+    J.Field('comments'),
+    J.Field('hidden', {
+        formatter: function(value) {
+            return value ? 'yes' : 'no';
+        }
+    })
+        
+// retrieve blog implementations
+J.templates('blog.public.v1') 
+// returns blog.public.v1 template
+
+J.templates('blog.private.v1') 
+// throws error: cannot find this template
+// reason: J.templates does NOT match wildcards
+
+J.templatesWildcard('blog.private.v1')
+// returns blog.*.v1 template
+
+```
+
 
 ## Example
 
