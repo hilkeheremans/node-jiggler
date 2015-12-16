@@ -1,11 +1,11 @@
 {
-  "author": "Brian Romanko @bromanko.",
-  "name": "jiggler",
-  "description": "jiggler provides a simple and flexible interface for defining representations for your JavaScript objects.",
-  "version": "0.0.9",
+  "author": "Hilke Heremans @hilkeheremans.",
+  "name": "jiggler-wildcard",
+  "description": "jiggler-wildcard is a fork of node-jiggler by @bromanko and provides a simple and flexible interface for defining representations for your JavaScript objects.",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/bromanko/node-jiggler.git"
+    "url": "git://github.com/hilkeheremans/node-jiggler.git"
   },
   "main": "lib/index.js",
   "directories": {
@@ -25,6 +25,6 @@
   },
   "optionalDependencies": {},
   "engines": {
-    "node": ">= 0.8"
+    "node": ">= 0.12"
   }
 }
