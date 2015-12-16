@@ -24,6 +24,7 @@ add support for serializers (including XML). We welcome pull requests.
 * Jiggler now stores its templates a little differently. It is now possible to store templates using a path instead of just a template name
 * Paths are stored using the usual dot notation.
 * Template retrieval, when called with J.templatesWildcard instead of J.templates, also supports wildcard notation, as defined in J.wildcard. This defaults to *. Exact matches trump wildcard matches.
+* The same applies for J.asWildcard vs J.as
 * Tests have been updated accordingly.
 * WARNING: unfortunately, this also breaks Jiggler's API. Instead of calling J.template[key] and J.as[key] you must now call J.template(path) and J.as(path, value) (function calls instead of accessors).
 * WARNING: The implementation relies on lodash's set function, which seems to have a bug/design choice that causes problems when you use numbers in a path segment. Ie do not use this.is.path.1, use this.is.path._1 instead.
