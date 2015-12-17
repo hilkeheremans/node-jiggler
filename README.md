@@ -175,8 +175,10 @@ J.Field('relationship', {
 	}
 })
 
-```
+// Include field metadata that can be used for documentation purposes
+J.Field('lastName', {type: String, description: 'Last name'})
 
+```
 See the unit tests for additional examples.
 
 
