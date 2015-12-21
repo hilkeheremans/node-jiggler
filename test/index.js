@@ -271,7 +271,7 @@ describe('Jiggler', function() {
       });
     });
 
-    it('should represent an array', function(done) {
+    it('should represent an array and preserve order', function(done) {
       var User = function() {
         this.firstName = '';
         this.lastName = '';
@@ -279,13 +279,27 @@ describe('Jiggler', function() {
       var user = new User();
       user.firstName = 'Davos';
       user.lastName = 'Seaworth';
+      user.timeout = 200;
       var user2 = new User();
       user2.firstName = 'Sandor';
       user2.lastName = 'Clegane';
+      user2.timeout = 100;
 
       var fields = [
-        J.Field('firstName'),
-        J.Field('lastName')
+        J.Field('firstName', {
+          src: function (object, context, callback) {
+            setTimeout(function () {
+              callback(null, object.firstName);
+            }, object.timeout);
+          }
+        }),
+        J.Field('lastName', {
+          src: function (object, context, callback) {
+            setTimeout(function () {
+              callback(null, object.lastName);
+            }, object.timeout);
+          }
+        })
       ];
       J.define('user_public', fields);
 
