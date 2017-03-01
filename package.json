@@ -1,6 +1,6 @@
 {
   "author": "Hilke Heremans @hilkeheremans.",
-  "name": "jiggler-wildcard",
+  "name": "@tsjing/jiggler-wildcard",
   "description": "@tsjing/jiggler-wildcard is a fork of node-jiggler by @bromanko and provides a simple and flexible interface for defining representations for your JavaScript objects.",
   "version": "1.0.3",
   "repository": {
